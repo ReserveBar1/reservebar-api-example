@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'slim'
+require 'pry'
 require 'httparty'
 
 #--------------------App_Routes--------------------#

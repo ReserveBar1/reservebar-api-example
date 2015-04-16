@@ -74,6 +74,7 @@ PLATFORMS
 DEPENDENCIES
   guard-livereload
   httparty
+  pry
   rack-livereload
   sinatra
   slim
