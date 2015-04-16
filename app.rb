@@ -1,7 +1,8 @@
 require 'sinatra'
+require 'slim'
 
 #--------------------App_Routes--------------------#
 
 get '/' do
-  "Hello, world!"
+  slim :index
 end
