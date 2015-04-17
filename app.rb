@@ -16,5 +16,7 @@ get '/' do
   # auth = {}
 
   @brands_resp = HTTParty.get(base_url + 'brands.json', basic_auth: auth)
+  @prod_resp = HTTParty.get("#{base_url}products.json?brand=Jameson",
+    basic_auth: auth)
   slim :index
 end
