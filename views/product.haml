@@ -1,0 +1,10 @@
+.title
+  = @product['name']
+
+.description
+  = @product['description']
+
+%form{action: "/checkout", method: 'post'}
+  %label Quantity
+  %input{type: 'text'}
+  %input{type: 'submit'}

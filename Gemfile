@@ -1,11 +1,9 @@
-source "http://rubygems.org"
+source 'http://rubygems.org'
 
 gem 'sinatra'
-gem 'slim'
+gem 'haml'
 gem 'httparty'
 
 group :development do
-  gem 'guard-livereload'
-  gem 'rack-livereload'
   gem 'pry'
 end
