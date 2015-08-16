@@ -1,12 +1,19 @@
 :javascript
+  $(document).on('click', '.brand', function() {
+    $.get( "brand_products/" + $(this).data('brand'), function( data ) {
+      $( ".result" ).html( data );
+    });
+  });
 
-%h3 Brands
-%p
-  = @brands_resp['brands']
+.brands{ style: 'float: left; display: inline-block;'}
+  %h3 Brands
+  %p
+    %ul
+      - @brands.each do |brand|
+        %li.brand{'data-brand' => brand}
+          = brand
 
-%h3 Hennessy Products
-%ul
-  - @products['products'].each do |product|
-    %li
-      %a{href: "/products/#{product['id']}"}
-        = product['sku']
+
+.products{ style: 'float: left; display: inline-block;'}
+  .result
+    result
