@@ -33,23 +33,57 @@ end
 get '/products/:product' do
   response = HTTParty.get("#{base_url}products/#{params[:product]}",
                           basic_auth: auth)
-  @product = response['product']
+  @product = response
   haml :product
 end
 
 post '/order' do
   puts "\n\nPARAMS: #{params}\n"
-  body = { line_items: { '0' => { variant_id: params[:product_id],
-                                   quantity: params[:quantity] } } }
+  body = { order: {
+                    line_items: {
+                      '0' => { variant_id: params[:sku],
+                               quantity: params[:quantity] }
+                    }
+                  }
+  }
   response = HTTParty.post("#{base_url}orders",
                            body: body,
                            basic_auth: auth)
-  @order_status = response.body
+  @order_status = JSON.parse(response.body)
   haml :order
 end
 
 post '/checkout' do
+  body = { id: params[:number], order_token: params[:token],
+           order: { email: 'guest@rbar.com' }
+         }
+  response = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+                           body: body,
+                           basic_auth: auth)
+  @order_status = JSON.parse(response.body)
   haml :checkout
 end
 
 
+post '/address' do
+  billing_address = shipping_address = {
+    firstname: params[:firstname],
+    lastname: params[:lastname],
+    address1: params[:address1],
+    city: params[:city],
+    state: params[:state],
+    country: "United States"
+  }
+  body = { id: params[:number], order_token: params[:token],
+           order: {
+                    email: 'guest@rbar.com',
+                    ship_address_attributes: shipping_address,
+                    bill_address_attributes: billing_address
+                  }
+         }
+  response = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+                           body: body,
+                           basic_auth: auth)
+  @order_status = JSON.parse(response.body)
+  haml :payment
+end

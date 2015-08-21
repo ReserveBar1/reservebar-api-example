@@ -1,1 +1,23 @@
 %h3 Checkout
+.checkout_info
+  = @order_status.inspect
+
+%form{action: "/address", method: 'post'}
+  %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
+  %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
+
+  %label First Name
+  %input{type: 'text', name: 'firstname'}
+  %label Last Name
+  %input{type: 'text', name: 'lastname'}
+  %label Address
+  %input{type: 'text', name: 'address1'}
+  %label City
+  %input{type: 'text', name: 'city'}
+  %label Phone
+  %input{type: 'text', name: 'phone'}
+  %label Zip
+  %input{type: 'text', name: 'zipcode'}
+  %label State
+  %input{type: 'text', name: 'state'}
+  %input{type: 'submit'}

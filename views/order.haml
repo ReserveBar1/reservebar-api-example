@@ -1,3 +1,28 @@
 %h1 Order Info
+.order_inspect
+  %h3= @order_status.inspect
 .order_info
-  = @order_status.inspect
+  %ul
+    %li
+      id: 
+      = @order_status['order']['id']
+    %li
+      total: 
+      = @order_status['order']['total']
+    %li
+      id: 
+      = @order_status['order']['id']
+    %li
+      Line Items:
+      %ul
+      - @order_status['order']['line_items'].each do |line_item|
+        - line_item = line_item['line_item']
+        %li
+          = line_item['quantity']
+          at
+          = line_item['price']
+.checkout
+  %form{action: "/checkout", method: 'post'}
+    %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
+    %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
+    %input{type: 'submit'}
