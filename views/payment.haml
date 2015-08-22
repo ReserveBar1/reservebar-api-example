@@ -1,3 +1,21 @@
 %h3 Checkout
 .checkout_info
   = @order_status.inspect
+
+%form{action: "/payment", method: 'post'}
+  %label Card Number
+  %input{type: 'text', name: 'number'}
+  %br
+  %label Expiration
+  %label month
+  %input{type: 'text', name: 'month'}
+  %label year
+  %input{type: 'text', name: 'year'}
+  %label cvv
+  %input{type: 'text', name: 'card_code'}
+  %input{type: 'hidden', name: 'first_name', value: @order_status['order']['ship_address']['firstname']}
+  %input{type: 'hidden', name: 'last_name', value: @order_status['order']['ship_address']['lastname']}
+  %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
+  %input{type: 'hidden', name: 'order_number', value: @order_status['order']['number']}
+  %input{type: 'hidden', name: 'bill_address_id', value: @order_status['order']['bill_address']['id']}
+  %input{type: 'submit'}

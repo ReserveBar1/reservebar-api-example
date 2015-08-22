@@ -1,0 +1,10 @@
+%h3 Checkout: Delivery Type Selection
+.checkout_info
+  = @order_status.inspect
+
+%form{action: "/delivery", method: 'post'}
+  %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
+  %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
+  %input{type: 'radio', name: 'shipping_method', value: 'FedEx'}
+  %br
+  %input{type: 'submit'}

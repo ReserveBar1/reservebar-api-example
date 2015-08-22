@@ -1,12 +1,14 @@
 .title
   = @product['name']
-  = @product['id']
+  %br
+  = @product['sku']
 
+%hr
 .description
   = @product['description']
 
 %form{action: "/order", method: 'post'}
-  %input{type: 'hidden', name: 'product_id', value: @product['id']}
+  %input{type: 'hidden', name: 'sku', value: @product['sku']}
   %label Quantity
   %input{type: 'text', name: 'quantity'}
   %input{type: 'submit'}
