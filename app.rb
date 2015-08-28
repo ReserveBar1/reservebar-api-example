@@ -3,16 +3,7 @@ require 'haml'
 require 'pry'
 require 'httparty'
 
-# Setup
-# staging
-# base_url = 'http://staging.reservebar.com/api/'
-# auth = { username: 'admin@reservebar.com', password: 'Reservebar12' }
-
-# local
-base_url = 'http://localhost:3000/api/'
-auth = { username: 'admin@reservebar.com', password: 'Reservebar12' }
 # --------------------App_Routes--------------------#
-
 get '/' do
   @brands_resp = HTTParty.get(base_url + 'brands.json', basic_auth: auth)
   @brands = @brands_resp['brands'] || ['error']
@@ -88,6 +79,7 @@ post '/address' do
                            basic_auth: auth)
 
   @order_status = JSON.parse(@resp.body)
+  @shipping_methods = get_shipping_methods
   haml :delivery
 end
 
@@ -127,4 +119,20 @@ post '/payment' do
                            basic_auth: auth)
   @order_status = JSON.parse(@resp.body)
   haml :complete
+end
+
+def get_shipping_methods
+  @resp = HTTParty.get("#{base_url}shipping_methods",
+                           basic_auth: auth)
+  JSON.parse(@resp.body)
+end
+
+def base_url
+  'http://localhost:3000/api/'
+  # 'http://staging.reservebar.com/api/'
+end
+
+def auth
+  { username: 'admin@reservebar.com', password: 'Reservebar12' }
+  # { username: 'admin@reservebar.com', password: 'Reservebar12' }
 end

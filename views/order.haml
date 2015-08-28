@@ -19,10 +19,11 @@
         - line_item = line_item['line_item']
         %li
           = line_item['quantity']
+          = line_item['variant']['name']
           at
           = line_item['price']
 .checkout
   %form{action: "/checkout", method: 'post'}
     %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
     %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
-    %input{type: 'submit'}
+    %input{type: 'submit', value: "Checkout"}

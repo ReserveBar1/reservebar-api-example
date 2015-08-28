@@ -5,6 +5,8 @@
 %form{action: "/delivery", method: 'post'}
   %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
   %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
-  %input{type: 'radio', name: 'shipping_method', value: 'FedEx'}
+  - @shipping_methods.each do |shipping_method|
+    - shipping_method = shipping_method['shipping_method']
+    %input{type: 'radio', name: 'shipping_method', value: shipping_method['id'] }= shipping_method['name']
   %br
   %input{type: 'submit'}
