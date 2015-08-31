@@ -13,6 +13,9 @@
   %input{type: 'text', name: 'year'}
   %label cvv
   %input{type: 'text', name: 'card_code'}
+  %br
+  %label Do you accept the terms?
+  %input{type: 'checkbox', name: 'terms'}
   %input{type: 'hidden', name: 'first_name', value: @order_status['order']['ship_address']['firstname']}
   %input{type: 'hidden', name: 'last_name', value: @order_status['order']['ship_address']['lastname']}
   %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}

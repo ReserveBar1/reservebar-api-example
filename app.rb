@@ -85,7 +85,7 @@ end
 
 post '/delivery' do
   body = { id: params[:number], order_token: params[:token],
-           order: { shipping_method_id: 1 }
+           order: { shipping_method_id: params[:shipping_method] }
          }
   @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
                            body: body,
@@ -99,7 +99,7 @@ post '/payment' do
   body = { id: params[:number], order_token: params[:token],
            order: {
                     bill_address_id: params[:bill_address_id],
-                    has_accepted_terms: 1,
+                    has_accepted_terms: params[:checkbox],
                     payment_source:
                     {
                       "1" =>
