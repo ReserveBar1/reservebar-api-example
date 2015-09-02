@@ -15,7 +15,7 @@ end
 get '/brand_products/:brand' do
   @products = HTTParty.get("#{base_url}products.json?brand=#{params[:brand]}",
                            basic_auth: auth)
-  haml :products, layout: false
+  haml :products
 end
 
 get '/products/:product' do
@@ -61,7 +61,7 @@ post '/address' do
     city: params[:city],
     zipcode: params[:zipcode],
     phone: params[:phone],
-    state_id: 276110813,
+    state: params[:state],
     country_id: 214
   }
   params[:is_legal_age] = params[:is_legal_age] == 'on' ? true : false
@@ -128,11 +128,10 @@ def get_shipping_methods
 end
 
 def base_url
-  'http://localhost:3000/api/'
-  # 'http://staging.reservebar.com/api/'
+  #'http://localhost:3000/api/'
+   'http://staging.reservebar.com/api/'
 end
 
 def auth
   { username: 'admin@reservebar.com', password: 'Reservebar12' }
-  # { username: 'admin@reservebar.com', password: 'Reservebar12' }
 end

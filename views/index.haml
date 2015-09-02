@@ -11,7 +11,8 @@
     %ul
       - @brands.each do |brand|
         %li.brand{'data-brand' => brand}
-          = brand
+          %a{href: "brand_products/#{brand}"}
+            = brand
 
 
 .products{ style: 'float: left; display: inline-block;'}

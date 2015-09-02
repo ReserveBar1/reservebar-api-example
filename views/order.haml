@@ -16,7 +16,6 @@
       Line Items:
       %ul
       - @order_status['order']['line_items'].each do |line_item|
-        - line_item = line_item['line_item']
         %li
           = line_item['quantity']
           = line_item['variant']['name']
