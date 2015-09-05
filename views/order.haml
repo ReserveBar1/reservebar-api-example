@@ -23,6 +23,8 @@
           = line_item['price']
 .checkout
   %form{action: "/checkout", method: 'post'}
+    %label Email
+    %input{type: 'text', name: 'email'}
     %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
     %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
     %input{type: 'submit', value: "Checkout"}

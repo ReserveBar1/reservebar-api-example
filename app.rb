@@ -43,7 +43,7 @@ end
 
 post '/checkout' do
   body = { id: params[:number], order_token: params[:token],
-           order: { email: 'guest@rbar.com' }
+           order: { email: params[:email] }
          }
   response = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
                            body: body,
@@ -67,7 +67,7 @@ post '/address' do
   params[:is_legal_age] = params[:is_legal_age] == 'on' ? true : false
   body = { id: params[:number], order_token: params[:token],
            order: {
-                    email: 'guest@rbar.com',
+                    email: params[:email],
                     ship_address_attributes: shipping_address,
                     bill_address_attributes: billing_address,
                     is_legal_age: params[:is_legal_age]

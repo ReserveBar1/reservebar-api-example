@@ -5,6 +5,7 @@
 %form{action: "/address", method: 'post'}
   %input{type: 'hidden', name: 'token', value: @order_status['order']['token']}
   %input{type: 'hidden', name: 'number', value: @order_status['order']['number']}
+  %input{type: 'hidden', name: 'email', value: @order_status['order']['email']}
 
   %label First Name
   %input{type: 'text', name: 'firstname'}
