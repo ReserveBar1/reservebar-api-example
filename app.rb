@@ -2,6 +2,12 @@ require 'sinatra'
 require 'haml'
 require 'pry'
 require 'httparty'
+require 'sinatra/config_file'
+require 'timeout'
+
+set :timeout, 900
+
+TIMEOUT = 1000
 
 # --------------------App_Routes--------------------#
 get '/' do
@@ -54,7 +60,7 @@ end
 
 
 post '/address' do
-  billing_address = shipping_address = {
+  shipping_address = {
     firstname: params[:firstname],
     lastname: params[:lastname],
     address1: params[:address1],
@@ -69,14 +75,15 @@ post '/address' do
            order: {
                     email: params[:email],
                     ship_address_attributes: shipping_address,
-                    bill_address_attributes: billing_address,
                     is_legal_age: params[:is_legal_age]
                   }
          }
-
-  @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
-                           body: body,
-                           basic_auth: auth)
+  Timeout::timeout(TIMEOUT) do
+    @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+                          body: body,
+                          basic_auth: auth,
+                          timeout: 1000)
+  end
 
   @order_status = JSON.parse(@resp.body)
   @shipping_methods = get_shipping_methods
@@ -96,27 +103,42 @@ post '/delivery' do
 end
 
 post '/payment' do
+  bill_address = {
+    firstname: 'bill',
+    lastname: 'last',
+    address1: '123 First',
+    city: "New York",
+    zipcode: "10009",
+    phone: '1234567890',
+    state: 'NY',
+    country_id: 214
+  }
+  params[:terms] = params[:terms] == 'on' ? 1 : 0
   body = { id: params[:number], order_token: params[:token],
            order: {
-                    bill_address_id: params[:bill_address_id],
-                    has_accepted_terms: params[:checkbox],
-                    payment_source:
-                    {
-                      "1" =>
+                    bill_address_id: params[:ship_address_id],
+                    has_accepted_terms: params[:terms],
+                    payments_attributes:
+                    [{
+                      payment_method_id: "3",
+                      source_attributes:
                        {
                          "first_name" => params[:first_name],
                          "last_name" => params[:last_name],
                          "number" => params[:number],
                          "month" => params[:month],
                          "year" => params[:year],
-                         "verification_value" => params[:card_code]
+                         "verification_value" => params[:card_code],
+                         "address_id" => params[:ship_address_id]
                        }
-                    }
-                  }
+                    }]
+                  },
+           bill_address: bill_address
          }
   @resp = HTTParty.put("#{base_url}checkouts/#{params[:order_number]}",
                            body: body,
-                           basic_auth: auth)
+                           basic_auth: auth,
+                           timeout: 1000)
   @order_status = JSON.parse(@resp.body)
   haml :complete
 end
@@ -129,7 +151,7 @@ end
 
 def base_url
   #'http://localhost:3000/api/'
-   'http://staging.reservebar.com/api/'
+  'https://staging.reservebar.com/api/'
 end
 
 def auth
