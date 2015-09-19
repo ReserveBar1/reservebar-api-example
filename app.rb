@@ -19,7 +19,8 @@ get '/' do
 end
 
 get '/brand_products/:brand' do
-  @products = HTTParty.get("#{base_url}products.json?brand=#{params[:brand]}",
+  brand = ERB::Util.url_encode(params[:brand])
+  @products = HTTParty.get("#{base_url}products.json?brand=#{brand}",
                            basic_auth: auth)
   haml :products
 end
@@ -78,13 +79,10 @@ post '/address' do
                     is_legal_age: params[:is_legal_age]
                   }
          }
-  Timeout::timeout(TIMEOUT) do
-    @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
-                          body: body,
-                          basic_auth: auth,
-                          timeout: 1000)
-  end
-
+  @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+                       body: body,
+                       basic_auth: auth,
+                       timeout: 1000)
   @order_status = JSON.parse(@resp.body)
   @shipping_methods = get_shipping_methods
   haml :delivery
