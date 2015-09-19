@@ -10,9 +10,9 @@
   %p
     %ul
       - @brands.each do |brand|
-        %li.brand{'data-brand' => brand}
-          %a{href: "brand_products/#{brand}"}
-            = brand
+        %li.brand{'data-brand' => brand['title']}
+          %a{href: "brand_products/#{ERB::Util.url_encode(brand['title'])}"}
+            == #{brand['title']}, #{brand['id']}
 
 
 .products{ style: 'float: left; display: inline-block;'}
