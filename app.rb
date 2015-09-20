@@ -45,6 +45,9 @@ post '/order' do
                            body: body,
                            basic_auth: auth)
   @order_status = JSON.parse(response.body)
+
+  return haml :exception if check_for_errors(@order_status)
+
   haml :order
 end
 
@@ -53,12 +56,14 @@ post '/checkout' do
            order: { email: params[:email] }
          }
   response = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
-                           body: body,
-                           basic_auth: auth)
+                          body: body,
+                          basic_auth: auth)
   @order_status = JSON.parse(response.body)
+
+  return haml :exception if check_for_errors(@order_status)
+
   haml :checkout
 end
-
 
 post '/address' do
   shipping_address = {
@@ -74,17 +79,20 @@ post '/address' do
   params[:is_legal_age] = params[:is_legal_age] == 'on' ? true : false
   body = { id: params[:number], order_token: params[:token],
            order: {
-                    email: params[:email],
-                    ship_address_attributes: shipping_address,
-                    is_legal_age: params[:is_legal_age]
-                  }
+             email: params[:email],
+             ship_address_attributes: shipping_address,
+             is_legal_age: params[:is_legal_age]
+           }
          }
   @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
                        body: body,
                        basic_auth: auth,
                        timeout: 1000)
   @order_status = JSON.parse(@resp.body)
-  @shipping_methods = get_shipping_methods
+
+  return haml :exception if check_for_errors(@order_status)
+
+  @shipping_methods = shipping_methods
   haml :delivery
 end
 
@@ -93,10 +101,13 @@ post '/delivery' do
            order: { shipping_method_id: params[:shipping_method] }
          }
   @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
-                           body: body,
-                           basic_auth: auth)
+                       body: body,
+                       basic_auth: auth)
 
   @order_status = JSON.parse(@resp.body)
+
+  return haml :exception if check_for_errors(@order_status)
+
   haml :payment
 end
 
@@ -105,8 +116,8 @@ post '/payment' do
     firstname: 'bill',
     lastname: 'last',
     address1: '123 First',
-    city: "New York",
-    zipcode: "10009",
+    city: 'New York',
+    zipcode: '10009',
     phone: '1234567890',
     state: 'NY',
     country_id: 214
@@ -114,41 +125,50 @@ post '/payment' do
   params[:terms] = params[:terms] == 'on' ? 1 : 0
   body = { id: params[:number], order_token: params[:token],
            order: {
-                    bill_address_id: params[:ship_address_id],
-                    has_accepted_terms: params[:terms],
-                    payments_attributes:
-                    [{
-                      payment_method_id: "3",
-                      source_attributes:
-                       {
-                         "first_name" => params[:first_name],
-                         "last_name" => params[:last_name],
-                         "number" => params[:number],
-                         "month" => params[:month],
-                         "year" => params[:year],
-                         "verification_value" => params[:card_code],
-                         "address_id" => params[:ship_address_id]
-                       }
-                    }]
-                  },
+             bill_address_id: params[:ship_address_id],
+             has_accepted_terms: params[:terms],
+             payments_attributes: [{
+               payment_method_id: '3',
+               source_attributes: {
+                 'first_name' => params[:first_name],
+                 'last_name' => params[:last_name],
+                 'number' => params[:number],
+                 'month' => params[:month],
+                 'year' => params[:year],
+                 'verification_value' => params[:card_code],
+                 'address_id' => params[:ship_address_id]
+               }
+             }]
+           },
            bill_address: bill_address
          }
   @resp = HTTParty.put("#{base_url}checkouts/#{params[:order_number]}",
-                           body: body,
-                           basic_auth: auth,
-                           timeout: 1000)
+                       body: body,
+                       basic_auth: auth,
+                       timeout: 1000)
   @order_status = JSON.parse(@resp.body)
+
+  return haml :exception if check_for_errors(@order_status)
+
   haml :complete
 end
 
-def get_shipping_methods
+def shipping_methods
   @resp = HTTParty.get("#{base_url}shipping_methods",
-                           basic_auth: auth)
+                       basic_auth: auth)
   JSON.parse(@resp.body)
 end
 
+def check_for_errors(api_response)
+  if (@exception = api_response['error'])
+    return true
+  else
+    return false
+  end
+end
+
 def base_url
-  #'http://localhost:3000/api/'
+  # 'http://localhost:3000/api/'
   'https://staging.reservebar.com/api/'
 end
 
