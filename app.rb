@@ -55,7 +55,7 @@ post '/checkout' do
   body = { id: params[:number], order_token: params[:token],
            order: { email: params[:email] }
          }
-  response = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+  response = HTTParty.put("#{ssl_base_url}checkouts/#{params[:number]}",
                           body: body,
                           basic_auth: auth)
   @order_status = JSON.parse(response.body)
@@ -84,7 +84,7 @@ post '/address' do
              is_legal_age: params[:is_legal_age]
            }
          }
-  @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+  @resp = HTTParty.put("#{ssl_base_url}checkouts/#{params[:number]}",
                        body: body,
                        basic_auth: auth,
                        timeout: 1000)
@@ -100,7 +100,7 @@ post '/delivery' do
   body = { id: params[:number], order_token: params[:token],
            order: { shipping_method_id: params[:shipping_method] }
          }
-  @resp = HTTParty.put("#{base_url}checkouts/#{params[:number]}",
+  @resp = HTTParty.put("#{ssl_base_url}checkouts/#{params[:number]}",
                        body: body,
                        basic_auth: auth)
 
@@ -142,7 +142,7 @@ post '/payment' do
            },
            bill_address: bill_address
          }
-  @resp = HTTParty.put("#{base_url}checkouts/#{params[:order_number]}",
+  @resp = HTTParty.put("#{ssl_base_url}checkouts/#{params[:order_number]}",
                        body: body,
                        basic_auth: auth,
                        timeout: 1000)
@@ -167,9 +167,14 @@ def check_for_errors(api_response)
   end
 end
 
-def base_url
-  # 'http://localhost:3000/api/'
+def ssl_base_url
+  #'http://localhost:3000/api/'
   'https://staging.reservebar.com/api/'
+end
+
+def base_url
+  #'http://localhost:3000/api/'
+  'http://staging.reservebar.com/api/'
 end
 
 def auth

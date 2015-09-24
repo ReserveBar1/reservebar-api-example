@@ -13,6 +13,53 @@ bundle install
 rackup config.ru
 ```
 
+Endpoints
+---------
+
+### /api/brands.json
+
+GET - Return a list of brands available through the API
+
+### /api/products
+
+GET /api/products.json?brand=jameson - return a list of products for the brand parameter
+
+GET /api/products/:product_id - Return information for a specific product
+
+### /api/orders
+
+POST /api/orders - Post an order with line items to be created in the Reservebar system
+
+GET /api/orders/:order_id - Return order information.  Must provide order token
+
+### /api/checkouts/:order_id
+
+This endpoint transitions an order through different states
+When the order is first created, the state is 'cart'
+The state changes happen in this order
+cart -> address -> delivery -> payment -> complete
+
+The PUT data required depends on the current order state
+
+cart:
+PUT /api/checkouts/:order_id expects an email to be associated with the order
+
+address:
+PUT /api/checkouts/:order_id expects email, shipping address, and is_legal_age boolean
+
+delivery:
+PUT /api/checkouts/:order_id expects the id of a delivery method obtained from the shipping_methods endpoint
+
+payment:
+PUT /api/checkouts/:order_id expects credit card info and billing address, as well as the accept_terms boolean
+
+
+### /api/shipping_methods
+
+GET /api/shipping_methods will return a list of available delivery options
+
+
+
 Stepping Through The API With Curl
 ----------------------------------
 
