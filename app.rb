@@ -11,22 +11,22 @@ TIMEOUT = 1000
 
 # --------------------App_Routes--------------------#
 get '/' do
-  @brands_resp = HTTParty.get(base_url + 'brands.json', basic_auth: auth)
+  @brands_resp = HTTParty.get(ssl_base_url + 'brands.json', basic_auth: auth)
   @brands = @brands_resp['brands'] || ['error']
-  @products = HTTParty.get("#{base_url}products.json?brand=Jameson",
+  @products = HTTParty.get("#{ssl_base_url}products.json?brand=Jameson",
                            basic_auth: auth)
   haml :index
 end
 
 get '/brand_products/:brand' do
   brand = ERB::Util.url_encode(params[:brand])
-  @products = HTTParty.get("#{base_url}products.json?brand=#{brand}",
+  @products = HTTParty.get("#{ssl_base_url}products.json?brand=#{brand}",
                            basic_auth: auth)
   haml :products
 end
 
 get '/products/:product' do
-  response = HTTParty.get("#{base_url}products/#{params[:product]}",
+  response = HTTParty.get("#{ssl_base_url}products/#{params[:product]}",
                           basic_auth: auth)
   @product = response
   haml :product
@@ -41,7 +41,7 @@ post '/order' do
              }
            }
          }
-  response = HTTParty.post("#{base_url}orders",
+  response = HTTParty.post("#{ssl_base_url}orders",
                            body: body,
                            basic_auth: auth)
   @order_status = JSON.parse(response.body)
@@ -154,7 +154,7 @@ post '/payment' do
 end
 
 def shipping_methods
-  @resp = HTTParty.get("#{base_url}shipping_methods",
+  @resp = HTTParty.get("#{ssl_base_url}shipping_methods",
                        basic_auth: auth)
   JSON.parse(@resp.body)
 end

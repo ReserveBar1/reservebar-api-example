@@ -66,12 +66,12 @@ Stepping Through The API With Curl
 Get a list of products for a brand
 
 ```bash
-curl -u admin@reservebar.com:Reservebar12 http://staging.reservebar.com/api/products.json\?brand\=baileys
+curl -u admin@reservebar.com:Reservebar12 https://staging.reservebar.com/api/products.json\?brand\=baileys
 ```
 Get the properties of a product.  Use The product id learned in the previous step
 
 ```bash
-curl -u admin@reservebar.com:Reservebar12 http://staging.reservebar.com/api/products/438
+curl -u admin@reservebar.com:Reservebar12 https://staging.reservebar.com/api/products/438
 ```
 
 Create an order
@@ -96,7 +96,7 @@ Address Step
 Retrieve Valid Delivery Options
 
 ```bash
-curl -u admin@reservebar.com:Reservebar12 http://staging.reservebar.com/api/shipping_methods
+curl -u admin@reservebar.com:Reservebar12 https://staging.reservebar.com/api/shipping_methods
 ```
 
 Choose Order Delivery Option
