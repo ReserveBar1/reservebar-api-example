@@ -113,9 +113,9 @@ end
 
 post '/payment' do
   bill_address = {
-    firstname: 'bill',
-    lastname: 'last',
-    address1: '123 First',
+    firstname: 'Test',
+    lastname: 'Tester',
+    address1: '100 First ave',
     city: 'New York',
     zipcode: '10009',
     phone: '1234567890',
@@ -128,7 +128,7 @@ post '/payment' do
              bill_address_id: params[:ship_address_id],
              has_accepted_terms: params[:terms],
              payments_attributes: [{
-               payment_method_id: '3',
+               payment_method_id: '4',
                source_attributes: {
                  'first_name' => params[:first_name],
                  'last_name' => params[:last_name],
@@ -169,12 +169,14 @@ end
 
 def ssl_base_url
   #'http://localhost:3000/api/'
-  'https://staging.reservebar.com/api/'
+  #'https://staging.reservebar.com/api/'
+  'https://reservebar.com/api/'
 end
 
 def base_url
   #'http://localhost:3000/api/'
-  'http://staging.reservebar.com/api/'
+  #'http://staging.reservebar.com/api/'
+  'http://reservebar.com/api/'
 end
 
 def auth
