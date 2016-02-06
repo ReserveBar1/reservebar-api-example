@@ -96,7 +96,7 @@ Address Step
 Retrieve Valid Delivery Options
 
 ```bash
-curl -u admin@reservebar.com:Reservebar12 https://staging.reservebar.com/api/shipping_methods
+curl -u admin@reservebar.com:Reservebar12 -H "Content-Type: application/json" -X PUT -d '{ "id": "R686515166" }' https://staging.reservebar.com/api/shipping_methods
 ```
 
 Choose Order Delivery Option

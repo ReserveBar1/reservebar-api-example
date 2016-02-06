@@ -8,5 +8,6 @@
   - @shipping_methods.each do |shipping_method|
     - shipping_method = shipping_method['shipping_method']
     %input{type: 'radio', name: 'shipping_method', value: shipping_method['id'] }= shipping_method['name']
+    %br
   %br
   %input{type: 'submit'}

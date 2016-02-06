@@ -128,7 +128,8 @@ post '/payment' do
              bill_address_id: params[:ship_address_id],
              has_accepted_terms: params[:terms],
              payments_attributes: [{
-               payment_method_id: '4',
+               # payment_method_id: '3', # for development/staging
+               payment_method_id: '4', # for production
                source_attributes: {
                  'first_name' => params[:first_name],
                  'last_name' => params[:last_name],
@@ -154,8 +155,11 @@ post '/payment' do
 end
 
 def shipping_methods
-  @resp = HTTParty.get("#{ssl_base_url}shipping_methods",
-                       basic_auth: auth)
+  body = { id: params[:number] }
+  @resp = HTTParty.put("#{ssl_base_url}shipping_methods",
+                       body: body,
+                       basic_auth: auth,
+                       timeout: 1000)
   JSON.parse(@resp.body)
 end
 
@@ -168,14 +172,14 @@ def check_for_errors(api_response)
 end
 
 def ssl_base_url
-  #'http://localhost:3000/api/'
-  #'https://staging.reservebar.com/api/'
+  # 'http://localhost:3000/api/'
+  # 'https://staging.reservebar.com/api/'
   'https://reservebar.com/api/'
 end
 
 def base_url
-  #'http://localhost:3000/api/'
-  #'http://staging.reservebar.com/api/'
+  # 'http://localhost:3000/api/'
+  # 'http://staging.reservebar.com/api/'
   'http://reservebar.com/api/'
 end
 
