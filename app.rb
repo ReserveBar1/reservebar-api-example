@@ -36,7 +36,7 @@ post '/order' do
   body = { order:
            { line_items:
              {
-               '0' => { variant_id: params[:sku],
+               '0' => { variant_id: params[:variant_id],
                         quantity: params[:quantity] }
              }
            }

@@ -8,7 +8,7 @@
   = @product['description']
 
 %form{action: "/order", method: 'post'}
-  %input{type: 'hidden', name: 'sku', value: @product['sku']}
+  %input{type: 'hidden', name: 'variant_id', value: @product['variant_id']}
   %label Quantity
   %input{type: 'text', name: 'quantity'}
   %input{type: 'submit'}
